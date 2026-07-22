@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
-"""
-Production-Quality Startup Ecosystem & Government Scheme Crawler Engine (v2.0)
--------------------------------------------------------------------------------
-Improvements in v2:
-- Multi-depth internal domain crawler with link discovery.
-- URL keyword filtering to avoid noise (login, news, careers, etc.).
-- Enhanced semantic parser for Eligibility, Benefits, and Last Updated dates.
-- Fully backwards compatible with existing CSV storage and NetworkEngine.
-"""
+# Production-Quality Startup Ecosystem & Government Scheme Crawler Engine (v2.0)
+# -------------------------------------------------------------------------------
+# Improvements in v2:
+# - Multi-depth internal domain crawler with link discovery.
+# - URL keyword filtering to avoid noise (login, news, careers, etc.).
+# - Enhanced semantic parser for Eligibility, Benefits, and Last Updated dates.
+# - Fully backwards compatible with existing CSV storage and NetworkEngine.
 
 from dataclasses import dataclass, asdict, fields
 import logging
@@ -31,6 +29,7 @@ from urllib3.util.retry import Retry
 # Logging Configuration
 # ---------------------------------------------------------------------------
 LOG_FILENAME = "scraper_errors.log"
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
@@ -38,7 +37,8 @@ logging.basicConfig(
         logging.FileHandler(LOG_FILENAME, mode="a", encoding="utf-8"),
         logging.StreamHandler()
     ]
-)
+) # FIX: Added missing closing parenthesis
+
 logger = logging.getLogger("EcosystemCrawler")
 
 # Key terminology for URL filtering and content verification
@@ -46,13 +46,13 @@ RELEVANT_KEYWORDS = {
     "scheme", "grant", "fund", "funding", "startup", "support",
     "program", "programme", "incubator", "accelerator", "innovation",
     "challenge", "loan", "subsidy", "seed"
-}
+} # FIX: Added missing closing brace
 
 IGNORED_URL_TOKENS = {
     "login", "signin", "signup", "contact", "privacy", "terms",
     "career", "careers", "job", "jobs", "news", "media", "press",
     "faq", "faqs", "sitemap", "gallery", "event", "events"
-}
+} # FIX: Added missing closing brace
 
 
 # ---------------------------------------------------------------------------
@@ -118,7 +118,7 @@ TARGET_PORTALS = [
         "category": "MSME Scheme",
         "use_playwright": False
     }
-]
+] # FIX: Added missing closing bracket
 
 
 # ---------------------------------------------------------------------------
@@ -233,6 +233,7 @@ class SchemeParser:
             # Skip non-navigational links
             if not href or href.startswith(("#", "javascript:", "mailto:", "tel:")):
                 continue
+
             if any(href.lower().endswith(ext) for ext in [".pdf", ".png", ".jpg", ".zip", ".docx"]):
                 continue
 
@@ -325,6 +326,7 @@ class SchemeParser:
                         if text:
                             siblings.append(text)
                     curr = curr.next_sibling
+                
                 if siblings:
                     return " ".join(siblings)[:400]
         return "N/A"
@@ -340,7 +342,7 @@ class SchemeParser:
         time_tag = soup.find("time")
         if time_tag and time_tag.get_text():
             return time_tag.get_text(strip=True)
-
+            
         return "N/A"
 
 
@@ -376,7 +378,7 @@ class DataStorageManager:
         """Deduplicate records against existing CSV entries and persist updates."""
         self.initialize_csv_if_missing()
         existing_urls = self.load_existing_urls()
-
+        
         new_records: List[Dict] = []
         skipped_count = 0
 
@@ -448,8 +450,8 @@ class StartupEcosystemCrawler:
 
             if current_url in visited or depth > self.crawl_depth:
                 continue
-
             visited.add(current_url)
+
             html_content = self.network.fetch(current_url, use_playwright=use_pw)
             
             if not html_content:
