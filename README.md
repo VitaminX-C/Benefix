@@ -195,7 +195,7 @@ BENEFIX/
 
 Traditional chatbots generate answers from what they've learned.
 
-SetuAI goes one step further.
+Benefix goes one step further.
 
 It **retrieves** the latest government documents first and then generates responses grounded in those official sources, making recommendations more accurate, reliable, and up-to-date.
 
